@@ -26,7 +26,7 @@ function before() {
   raw.UGL.cards = raw.UGL.cards.filter(x => x.layout !== 'token')
 
   // these cards do not appear in boosters
-  for (let code of ['8ED', '9ED', 'M15'])
+  for (let code of ['8ED', '9ED', 'M15', 'ORI'])
     raw[code].cards = raw[code].cards.filter(x => !x.starter)
 
   delete raw.PTK.booster
