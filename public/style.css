@@ -1,0 +1,41 @@
+label {
+  cursor: pointer;
+}
+
+textarea {
+  height: 1em;
+  vertical-align: top;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+.row {
+  display: flex;
+}
+
+#cards img {
+  height: 340px;
+  width: 240px;
+  cursor: pointer;
+}
+
+#lands input {
+  width: 3em;
+}
+
+#cards .Cols img {
+  height: 255px;
+  width: 180px;
+  margin-bottom: -230px;
+}
+
+#cards .Cols img:last-child {
+  margin-bottom: 0;
+}
+
+#hover {
+  position: fixed;
+  bottom: 0;
+}
