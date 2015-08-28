@@ -4,6 +4,7 @@ import reducers from './reducers/index.js'
 
 class App extends React.Component {
   componentWillMount() {
+    console.log('%chttps://github.com/aeosynth/editor', 'font-size: x-large')
     store.init(reducers, this)
     window.addEventListener('unload', store.save)
   }

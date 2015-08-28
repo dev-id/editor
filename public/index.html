@@ -9,18 +9,11 @@
 <body>
   <div id="app"></div>
   <script src="node_modules/whatwg-fetch/fetch.js"></script>
+  <script src="node_modules/react/dist/react.min.js"></script>
+  <script src="node_modules/systemjs/dist/system-register-only.js"></script>
   <script>
-    __REACT_DEVTOOLS_GLOBAL_HOOK__ = {}//STFU
-  </script>
-  <script src="node_modules/react/dist/react.js"></script>
-  <script src="node_modules/systemjs/dist/system.js"></script>
-  <script src="node_modules/babel/node_modules/babel-core/browser.js"></script>
-
-  <script>
-    System.config({ transpiler: 'babel' })
-
     System
-    .import('js/index.js')
+    .import('build/index.js')
     .catch(function(err) { console.log(err.message) })
   </script>
 </body>
