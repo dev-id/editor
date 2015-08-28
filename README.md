@@ -6,7 +6,7 @@
 
 -  node app.js
 
--  <localhost:1337>
+-  <http://localhost:1337>
 
 [node.js]: http://nodejs.org/
 [io.js]: https://iojs.org/
