@@ -8,7 +8,7 @@ let Sets = {}
 before()
 
 let types = ['commander', 'core', 'expansion', 'planechase', 'un']
-let codes = ['pHHO', 'CNS', 'MMA', 'PTK', 'VMA']
+let codes = ['pHHO', 'CNS', 'MMA', 'MM2', 'PTK', 'VMA', 'TPR']
 for (let code in raw) {
   let rawSet = raw[code]
   if (types.includes(rawSet.type)
@@ -25,7 +25,7 @@ fs.writeFileSync('data/sets.json', JSON.stringify(Sets, null, 2))
 function before() {
   raw.UGL.cards = raw.UGL.cards.filter(x => x.layout !== 'token')
 
-  // these cards do not appear in boosters
+  // starter cards do not appear in boosters
   for (let code of ['8ED', '9ED', 'M15', 'ORI'])
     raw[code].cards = raw[code].cards.filter(x => !x.starter)
 

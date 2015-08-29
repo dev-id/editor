@@ -2,9 +2,9 @@
 
 -  [node.js] or [io.js]
 
--  make
+-  `make`
 
--  node app.js
+-  `node app.js`
 
 -  <http://localhost:1337>
 
