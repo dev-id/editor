@@ -13,12 +13,11 @@
     __REACT_DEVTOOLS_GLOBAL_HOOK__ = {}//STFU
   </script>
   <script src="node_modules/react/dist/react.js"></script>
-  <script src="node_modules/systemjs/dist/system.js"></script>
-  <script src="node_modules/babel/node_modules/babel-core/browser.js"></script>
-
+  <script src="node_modules/es6-module-loader/dist/es6-module-loader-dev.js"></script>
+  <script src="node_modules/babel-core/browser.js"></script>
   <script>
-    System.config({ transpiler: 'babel' })
-
+    System.transpiler = 'babel'
+    System.babelOptions = { loose: 'all' }
     System
     .import('js/index.js')
     .catch(function(err) { console.log(err.message) })
