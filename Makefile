@@ -11,5 +11,4 @@ data:
 	node src/make cards
 
 js:
-	node_modules/babel/bin/babel.js\
-	  public/js --out-dir public/build --modules=system
+	node src/make bundle
