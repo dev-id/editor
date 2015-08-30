@@ -39,6 +39,11 @@ function before() {
     || /draft/.test(card.text))
       card.rarity = 'special'
 
+  // XXX not exactly correct
+  for (let card of raw.CSP.cards)
+    if (card.type.startsWith('Basic Snow Land'))
+      card.rarity = 'special'
+
   for (let card of raw.DGM.cards)
     if (/Guildgate/.test(card.name))
       card.rarity = 'special'
