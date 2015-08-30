@@ -15,7 +15,7 @@ let read = {
         return
 
       let [, n, name] = match
-      list[zoneName][name] = Number(n)
+      list[zoneName][name] = n | 0
     })
 
     return list
@@ -33,7 +33,7 @@ let read = {
       let [, side, n, cardName] = x.match(/(SB: )?(\d+) \[\w+\] (.+)/)
       cardName = cardName.replace('/', ' // ')
 
-      list[side ? 'side' : 'main'][cardName] = Number(n)
+      list[side ? 'side' : 'main'][cardName] = n | 0
     })
 
     return list
@@ -49,7 +49,7 @@ let read = {
         return zoneName = 'side'
 
       let [, n, cardName] = x.match(/(\d+ )?(.+)/)
-      list[zoneName][cardName] = Number(n) || 1
+      list[zoneName][cardName] = n | 0 || 1
     })
 
     return list
