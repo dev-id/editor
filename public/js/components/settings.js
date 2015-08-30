@@ -1,3 +1,5 @@
+const SORTS = ['cmc', 'color', 'type', 'rarity']
+
 export default class Settings extends React.Component {
   copy(e) {
     let text = this.props.copy()
@@ -58,11 +60,11 @@ export default class Settings extends React.Component {
         </label>
       </div>
       <div>
-        {['cmc', 'color', 'type', 'rarity'].map(sort =>
+        {SORTS.map(sort =>
           <button
             key={sort}
             disabled={sort === props.sort}
-            onClick={e=>props.setSort(['sort', sort])}
+            onClick={e => props.setSort(['sort', sort])}
             >{sort}
           </button>
         )}

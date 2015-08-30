@@ -17,31 +17,17 @@ for (let name in STATE)
     url: `http://magiccards.info/scans/en/uh/${STATE[name]}.jpg`
   }
 
-let state
-let funks = {
-  cache(cards) {
-    cards.forEach(card =>
-      state[card.name.toLowerCase()] = card)
-  },
-  addPack(cards) {
-    cards.forEach(card => {
-      if (!state[card.name.toLowerCase()])
-        state[card.name.toLowerCase()] = card
-    })
-  },
-  addCard(card) {
-    if (!state[card.name.toLowerCase()])
-      state[card.name.toLowerCase()] = card
+export default function(state=STATE, type, data) {
+  switch(type) {
+  case 'addCards':
+  case 'cache':
     state.error = null
-  },
-  error(err) {
-    state.error = err
+    data.forEach(card =>
+      state[card.name.toLowerCase()] = card)
+    break
+  case 'error':
+    state.error = data
+    break
   }
-}
-
-export default function(_state=STATE, type, data) {
-  state = _state
-  if (funks[type])
-    funks[type](data)
   return state
 }

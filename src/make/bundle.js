@@ -1,10 +1,11 @@
 import Builder from 'systemjs-builder'
+import fs from 'fs'
 
-let builder = new Builder({
+let babelOptions = JSON.parse(fs.readFileSync('.babelrc'))
+
+new Builder({
   baseURL: 'public/js',
   transpiler: 'babel',
-  babelOptions: {
-    loose: 'all'
-  }
+  babelOptions
 })
 .buildSFX('index.js', 'public/bundle.js', { minify: true })

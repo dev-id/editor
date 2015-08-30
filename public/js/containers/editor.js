@@ -14,28 +14,28 @@ export default class Editor extends React.Component {
 
     return <div>
       <Lands
-        setCard={_dispatch('setCard')}
         list={state.list}
+        setCard={_dispatch('setCard')}
       />
       <Settings
         {...state.user}
         copy={Actions.copy}
-        link={Actions.link}
-        filetypes={Object.keys(formats.write)}
         download={Actions.download}
+        filetypes={Object.keys(formats.write)}
+        link={Actions.link}
         setZone={Actions.setZone}
         setSort={_dispatch('user')}
       />
       <div>{state.cache.error}</div>
       <Inputs
+        {...Actions}
         accept={Object.keys(formats.read).map(x => `.${x}`).join(',')}
         clear={_dispatch('clear')}
-        {...Actions}
       />
       <Cards
+        cache={state.cache}
         cols={state.user.cols}
         clickCard={_dispatch('clickCard')}
-        cache={state.cache}
         list={state.list}
         sort={state.user.sort}
       />

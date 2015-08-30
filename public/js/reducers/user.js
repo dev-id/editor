@@ -1,10 +1,10 @@
 export default function(state = {
   cols: false,
-  sort: 'color',
   filename: 'filename',
   filetype: 'txt',
   set: 'ORI',
-  side: false
+  side: false,
+  sort: 'color'
 }, type, data) {
   if (type === 'user') {
     let [key, val] = data

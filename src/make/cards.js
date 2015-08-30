@@ -8,7 +8,7 @@ let Sets = {}
 before()
 
 let types = ['commander', 'core', 'expansion', 'planechase', 'un']
-let codes = ['pHHO', 'CNS', 'MMA', 'PTK', 'VMA']
+let codes = ['pHHO', 'CNS', 'MMA', 'MM2', 'PTK', 'VMA', 'TPR']
 for (let code in raw) {
   let rawSet = raw[code]
   if (types.includes(rawSet.type)
@@ -18,14 +18,14 @@ for (let code in raw) {
 
 after()
 
-list()
+fs.writeFileSync('data/setlist.js', list())
 fs.writeFileSync('data/cards.json', JSON.stringify(Cards, null, 2))
 fs.writeFileSync('data/sets.json', JSON.stringify(Sets, null, 2))
 
 function before() {
   raw.UGL.cards = raw.UGL.cards.filter(x => x.layout !== 'token')
 
-  // these cards do not appear in boosters
+  // starter cards do not appear in boosters
   for (let code of ['8ED', '9ED', 'M15', 'ORI'])
     raw[code].cards = raw[code].cards.filter(x => !x.starter)
 
@@ -34,22 +34,27 @@ function before() {
   raw.TSP.cards.push(...raw.TSB.cards)
   delete raw.TSB
 
-  for (let card of raw.ISD.cards)
-    if (card.layout === 'double-faced')
+  for (let card of raw.CNS.cards)
+    if (card.type === 'Conspiracy'
+    || /draft/.test(card.text))
+      card.rarity = 'special'
+
+  // XXX not exactly correct
+  for (let card of raw.CSP.cards)
+    if (card.type.startsWith('Basic Snow Land'))
       card.rarity = 'special'
 
   for (let card of raw.DGM.cards)
     if (/Guildgate/.test(card.name))
       card.rarity = 'special'
 
-  for (let card of raw.CNS.cards)
-    if (card.type === 'Conspiracy'
-    || /draft/.test(card.text))
-      card.rarity = 'special'
-
   for (let card of raw.FRF.cards)
     if (card.types[0] === 'Land'
     && card.name !== 'Crucible of the Spirit Dragon')
+      card.rarity = 'special'
+
+  for (let card of raw.ISD.cards)
+    if (card.layout === 'double-faced')
       card.rarity = 'special'
 }
 
@@ -59,6 +64,9 @@ function after() {
     let n = parseInt(card.number)
     Cards[name].sets.pHHO.url = `http://magiccards.info/scans/en/hho/${n}.jpg`
   }
+
+  for (let cardName of Sets.CSP.special)
+    Cards[cardName].sets.CSP.rarity = 'basic'
 
   Sets.PLC.size = Sets.FUT.size = 11
 
@@ -114,8 +122,7 @@ function list() {
   list = Object.keys(list).map(label =>
     ({ label, sets: list[label].reverse() }))
 
-  let js = 'export default ' + JSON.stringify(list)
-  fs.writeFileSync('data/setlist.js', js)
+  return 'export default ' + JSON.stringify(list)
 }
 
 function alias(names, dst) {
@@ -198,7 +205,7 @@ function doCards(rawCards) {
       : 'Multicolor'
 
     cards[lc] = {
-      cmc: rawCard.cmc || 0,
+      cmc: rawCard.cmc | 0,
       color,
       name,
       type: rawCard.types.pop(),

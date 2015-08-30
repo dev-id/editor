@@ -15,10 +15,13 @@ let read = {
         return
 
       let [, n, name] = match
-      list[zoneName][name] = Number(n)
+      list[zoneName][name] = n | 0
     })
 
     return list
+  },
+  json(text) {
+    return JSON.parse(text.join(''))
   },
   mwdeck(text) {
     let list = {
@@ -28,8 +31,9 @@ let read = {
 
     text.forEach(x => {
       let [, side, n, cardName] = x.match(/(SB: )?(\d+) \[\w+\] (.+)/)
+      cardName = cardName.replace('/', ' // ')
 
-      list[side ? 'side' : 'main'][cardName] = Number(n)
+      list[side ? 'side' : 'main'][cardName] = n | 0
     })
 
     return list
@@ -45,7 +49,7 @@ let read = {
         return zoneName = 'side'
 
       let [, n, cardName] = x.match(/(\d+ )?(.+)/)
-      list[zoneName][cardName] = Number(n) || 1
+      list[zoneName][cardName] = n | 0 || 1
     })
 
     return list
@@ -71,6 +75,9 @@ ${f(list.main)}
 ${f(list.side)}
   </zone>
 </cockatrice_deck>`
+  },
+  json(list) {
+    return JSON.stringify(list, null, 2)
   },
   mwdeck(list, filename, cache) {
     let ret = []

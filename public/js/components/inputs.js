@@ -9,7 +9,7 @@ export default class Inputs extends React.Component {
       return
 
     let node = e.target
-    let text = node.value.trim().toLowerCase()
+    let text = node.value.trim()
 
     this.props.addCard(text)
   }

@@ -36,7 +36,7 @@ export default class Cards extends React.Component {
       <img
         key={i}
         src={card.url}
-        onClick={e => clickCard([zoneName, card.name])}
+        onClick={e => clickCard([zoneName, card.name, e.shiftKey])}
       />
     )
   }
@@ -51,7 +51,7 @@ export default class Cards extends React.Component {
             <img
               key={i}
               src={card.url}
-              onClick={e => clickCard([zoneName, card.name])}
+              onClick={e => clickCard([zoneName, card.name, e.shiftKey])}
               onMouseEnter={e => this.hover(e)}
             />
           )}
@@ -112,7 +112,7 @@ export default class Cards extends React.Component {
     let view = cols ? 'Cols' : 'Grid'
 
     return <div id='cards'>
-      {['main', 'side'].map(zoneName => {
+      {Object.keys(list).map(zoneName => {
         let cards = []
         let zone = list[zoneName]
         for (let cardName in zone) {
