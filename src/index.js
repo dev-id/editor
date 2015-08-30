@@ -15,7 +15,7 @@ http
       let data = err
         ? { error: err.message }
         : api(split[0], str)
-      res.end(JSON.stringify(data)
+      res.end(JSON.stringify(data))
     })
 
   send(req, pathname, { root: 'public' })
