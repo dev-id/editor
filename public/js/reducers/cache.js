@@ -19,11 +19,9 @@ for (let name in STATE)
 
 export default function(state=STATE, type, data) {
   switch(type) {
-  case 'addCard':
-    state.error = null
-    data = [data]
-  case 'addPack':
+  case 'addCards':
   case 'cache':
+    state.error = null
     data.forEach(card =>
       state[card.name.toLowerCase()] = card)
     break

@@ -56,7 +56,7 @@ let Actions = {
     name = _.ascii(name).toLowerCase()
     let card = store.state.cache[name]
     if (card)
-      return store.dispatch('addCard', card)
+      return store.dispatch('addCards', [card])
     fetch('/card', {
       method: 'post',
       body: JSON.stringify(name)
@@ -66,7 +66,7 @@ let Actions = {
       if (json.error)
         store.dispatch('error', json.error)
       else
-        store.dispatch('addCard', json)
+        store.dispatch('addCards', [json])
     })
     .catch(dispatchError)
   },
@@ -77,7 +77,7 @@ let Actions = {
       body: JSON.stringify(set)
     })
     .then(res => res.json())
-    .then(json => store.dispatch('addPack', json))
+    .then(json => store.dispatch('addCards', json))
     .catch(dispatchError)
   },
   setList(file) {

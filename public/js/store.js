@@ -19,8 +19,9 @@ let store = {
   },
   dispatch(type, data) {
     console.log('dispatch', type, data)
+    let {state} = store
     for (let key in reducers)
-      store.state[key] = reducers[key](store.state[key], type, data)
+      state[key] = reducers[key](state[key], type, data, state)
     store.update()
   },
   _dispatch(type) {
