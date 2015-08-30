@@ -1,6 +1,26 @@
+import MWS from '../data/mws'
 import Cards from '../data/cards'
 import Sets from '../data/sets'
 import _ from './_'
+
+function selectRarity() {
+  // average pack contains:
+  // 14 cards
+  // 10 commons
+  // 3 uncommons
+  // 7/8 rare
+  // 1/8 mythic
+  // * 8 -> 112/80/24/7/1
+
+  let n = _.rand(112)
+  if (n < 1)
+    return 'mythic'
+  if (n < 8)
+    return 'rare'
+  if (n < 32)
+    return 'uncommon'
+  return 'common'
+}
 
 let generate = {
   card(cardName, code) {
@@ -9,7 +29,11 @@ let generate = {
 
     if (!code)
       code = Object.keys(sets).pop()
+
     let set = sets[code]
+
+    if (MWS[code])
+      code = MWS[code]
 
     card = Object.assign({ code }, card, set)
     delete card.sets
@@ -37,12 +61,12 @@ let generate = {
       break
     case 'MMA':
     case 'MM2':
-      special = selectRarity(set)
+      special = set[selectRarity()]
       break
     case 'VMA':
       //http://www.wizards.com/magic/magazine/article.aspx?x=mtg/daily/arcana/1491
       if (_.rand(53))
-        special = selectRarity(set)
+        special = set[selectRarity()]
       break
     }
 
