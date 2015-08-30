@@ -12,15 +12,15 @@ http
 
   if (req.method === 'POST')
     return getRawBody(req, 'utf8', (err, str) => {
-      if (err)
-        return res.end(JSON.stringify({ error: err.message }))
-
-      let data = api(split[0], str)
-      res.end(JSON.stringify(data))
+      let data = err
+        ? { error: err.message }
+        : api(split[0], str)
+      res.end(JSON.stringify(data)
     })
 
   send(req, pathname, { root: 'public' })
   .pipe(res)
-}).listen(1337)
+})
+.listen(1337)
 
 console.log(new Date)

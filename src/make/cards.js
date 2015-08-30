@@ -65,6 +65,9 @@ function after() {
     Cards[name].sets.pHHO.url = `http://magiccards.info/scans/en/hho/${n}.jpg`
   }
 
+  for (let cardName of Sets.CSP.special)
+    Cards[cardName].sets.CSP.rarity = 'basic'
+
   Sets.PLC.size = Sets.FUT.size = 11
 
   let {DGM} = Sets

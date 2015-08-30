@@ -3,7 +3,7 @@ import fs from 'fs'
 
 let babelOptions = JSON.parse(fs.readFileSync('.babelrc'))
 
-let builder = new Builder({
+new Builder({
   baseURL: 'public/js',
   transpiler: 'babel',
   babelOptions
