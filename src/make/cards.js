@@ -18,7 +18,7 @@ for (let code in raw) {
 
 after()
 
-list()
+fs.writeFileSync('data/setlist.js', list())
 fs.writeFileSync('data/cards.json', JSON.stringify(Cards, null, 2))
 fs.writeFileSync('data/sets.json', JSON.stringify(Sets, null, 2))
 
@@ -34,22 +34,22 @@ function before() {
   raw.TSP.cards.push(...raw.TSB.cards)
   delete raw.TSB
 
-  for (let card of raw.ISD.cards)
-    if (card.layout === 'double-faced')
+  for (let card of raw.CNS.cards)
+    if (card.type === 'Conspiracy'
+    || /draft/.test(card.text))
       card.rarity = 'special'
 
   for (let card of raw.DGM.cards)
     if (/Guildgate/.test(card.name))
       card.rarity = 'special'
 
-  for (let card of raw.CNS.cards)
-    if (card.type === 'Conspiracy'
-    || /draft/.test(card.text))
-      card.rarity = 'special'
-
   for (let card of raw.FRF.cards)
     if (card.types[0] === 'Land'
     && card.name !== 'Crucible of the Spirit Dragon')
+      card.rarity = 'special'
+
+  for (let card of raw.ISD.cards)
+    if (card.layout === 'double-faced')
       card.rarity = 'special'
 }
 
@@ -114,8 +114,7 @@ function list() {
   list = Object.keys(list).map(label =>
     ({ label, sets: list[label].reverse() }))
 
-  let js = 'export default ' + JSON.stringify(list)
-  fs.writeFileSync('data/setlist.js', js)
+  return 'export default ' + JSON.stringify(list)
 }
 
 function alias(names, dst) {
@@ -198,7 +197,7 @@ function doCards(rawCards) {
       : 'Multicolor'
 
     cards[lc] = {
-      cmc: rawCard.cmc || 0,
+      cmc: rawCard.cmc | 0,
       color,
       name,
       type: rawCard.types.pop(),

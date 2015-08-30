@@ -28,7 +28,22 @@ let generate = {
       _.sample(rare, 1)
     ])
 
-    switch(code) {
+    switch (code) {
+    case 'DGM':
+    case 'FRF':
+      special = _.rand(20)
+        ? special.common
+        : special.special
+      break
+    case 'MMA':
+    case 'MM2':
+      special = selectRarity(set)
+      break
+    case 'VMA':
+      //http://www.wizards.com/magic/magazine/article.aspx?x=mtg/daily/arcana/1491
+      if (_.rand(53))
+        special = selectRarity(set)
+      break
     }
 
     if (special)
