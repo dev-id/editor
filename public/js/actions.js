@@ -53,6 +53,7 @@ let Actions = {
     }
   },
   addCard(name) {
+    name = _.ascii(name).toLowerCase()
     let card = store.state.cache[name]
     if (card)
       return store.dispatch('addCard', card)

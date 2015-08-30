@@ -7,7 +7,7 @@ let store = {
     localStorage.state = JSON.stringify(store.state, (k, v) =>
       k === 'cache' ? undefined : v)
   },
-  init(_reducers, root) {
+  init(_reducers, update) {
     reducers = _reducers
 
     try {
@@ -15,7 +15,7 @@ let store = {
     } catch(err) {}
     store.dispatch()
 
-    store.update = root.forceUpdate.bind(root)
+    store.update = update
   },
   dispatch(type, data) {
     console.log('dispatch', type, data)
