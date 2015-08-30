@@ -114,7 +114,8 @@ let Actions = {
 
         let newList = {
           main: {},
-          side: {}
+          side: {},
+          junk: {}
         }
         for (let zoneName in list) {
           let zone = list[zoneName]

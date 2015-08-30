@@ -1,15 +1,20 @@
 import _ from '../_.js'
 let state
 
+function getInitialState() {
+  return {
+    main: {},
+    side: {},
+    junk: {}
+  }
+}
+
 let types = {
   setList(list) {
     state = list
   },
   clear() {
-    state = {
-      main: {},
-      side: {}
-    }
+    state = getInitialState()
   },
   setZone(side) {
     let to = side ? state.side : state.main
@@ -24,11 +29,14 @@ let types = {
     let list = _.count(cards, 'name')
     _.mergeAdd(state[zoneName], list)
   },
-  clickCard([zoneName, cardName]) {
+  clickCard([zoneName, cardName, shift]) {
     if (!--state[zoneName][cardName])
       delete state[zoneName][cardName]
 
-    zoneName = zoneName === 'main' ? 'side' : 'main'
+    zoneName = shift
+      ? zoneName === 'junk' ? 'main' : 'junk'
+      : zoneName === 'side' ? 'main' : 'side'
+
     _.mergeAdd(state[zoneName], cardName)
   },
   setCard([zoneName, cardName, n]) {
@@ -39,12 +47,8 @@ let types = {
   }
 }
 
-export default function (_state = {
-  main: {},
-  side: {}
-}, type, data, gState) {
-
-  state = _state
+export default function (_state, type, data, gState) {
+  state = _state || getInitialState()
 
   if (types[type])
     types[type](data, gState)
