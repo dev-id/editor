@@ -12,8 +12,8 @@ cards:
 js:
 	node src/make bundle
 
-public/build/style.min.css: public/style.css
+public/bundle.css: public/style.css
 	cat node_modules/normalize.css/normalize.css public/style.css |\
-	  node_modules/clean-css/bin/cleancss -o public/style.min.css
+	  node_modules/clean-css/bin/cleancss -o public/bundle.css
 
-client: js public/build/style.min.css
+client: js public/bundle.css
