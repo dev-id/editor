@@ -10,7 +10,7 @@ export default class Lands extends React.Component {
         <td></td>
         {COLORS.map(c =>
           <td key={c}>
-            <img src={`http://www.wizards.com/Magic/redesign/${c}_Mana.png`}/>
+            <img src={`/media/${c}.svg`}/>
           </td>
         )}
       </tr>

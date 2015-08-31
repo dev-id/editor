@@ -37,6 +37,11 @@ textarea {
   bottom: 0;
 }
 
+#lands img {
+  height: 32px;
+  width: 32px;
+}
+
 #lands input {
   width: 3em;
 }
