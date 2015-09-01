@@ -19,6 +19,7 @@ export default class Inputs extends React.Component {
         <input
           placeholder='add card'
           ref='addCard'
+          type='text'
           onKeyDown={e => this.addCard(e)}
         />
       </div>

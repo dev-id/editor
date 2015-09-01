@@ -1,10 +1,30 @@
-label {
-  cursor: pointer;
+button,
+input[type="file"],
+input[type="number"],
+input[type="text"],
+select,
+textarea {
+  box-sizing: border-box;
+  border: 1px solid black;
+  height: 42px;
+  vertical-align: top;
+  padding: 5px;
+  outline-color: hotpink;
 }
 
-textarea {
-  height: 1em;
-  vertical-align: top;
+button, select {
+  background-color: white;
+}
+
+button[disabled] {
+  background-color: black;
+  color: white;
+}
+
+label {
+  cursor: pointer;
+  display: block;
+  margin: 12px 0;
 }
 
 .col {

@@ -16,6 +16,7 @@ export default class Settings extends React.Component {
           download
         </button>
         <input
+          type='text'
           placeholder='filename'
           valueLink={props.link('filename')}
         />
@@ -34,31 +35,28 @@ export default class Settings extends React.Component {
           copy
         </button>
         <textarea
+          placeholder='decklist'
           readOnly
           ref='copy'
         />
       </div>
-      <div>
-        <label>
-          <input
-            checked={props.side}
-            type='checkbox'
-            onChange={e => props.setZone(e.target.checked)}
-          />
-          {' '}
-          add cards to side
-        </label>
-      </div>
-      <div>
-        <label>
-          <input
-            type='checkbox'
-            checkedLink={props.link('cols')}
-          />
-          {' '}
-          column view
-        </label>
-      </div>
+      <label>
+        <input
+          checked={props.side}
+          type='checkbox'
+          onChange={e => props.setZone(e.target.checked)}
+        />
+        {' '}
+        add cards to side
+      </label>
+      <label>
+        <input
+          type='checkbox'
+          checkedLink={props.link('cols')}
+        />
+        {' '}
+        column view
+      </label>
       <div>
         {SORTS.map(sort =>
           <button
