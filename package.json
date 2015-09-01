@@ -11,7 +11,7 @@
     "es6-module-loader": "^0.17.6",
     "normalize.css": "^3.0.3",
     "raw-body": "^2.1.2",
-    "react": "^0.13.3",
+    "react": "^0.14.0-beta3",
     "send": "^0.13.0",
     "systemjs-builder": "^0.13.5",
     "whatwg-fetch": "^0.9.0"
