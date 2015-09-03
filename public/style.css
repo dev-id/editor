@@ -12,6 +12,11 @@ textarea {
   outline-color: hotpink;
 }
 
+svg {
+  height: 32px;
+  width: 32px;
+}
+
 button, select {
   background-color: white;
 }
@@ -55,11 +60,6 @@ label {
 #hover {
   position: fixed;
   bottom: 0;
-}
-
-#lands img {
-  height: 32px;
-  width: 32px;
 }
 
 #lands input {

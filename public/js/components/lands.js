@@ -10,7 +10,9 @@ export default class Lands extends React.Component {
         <td></td>
         {COLORS.map(c =>
           <td key={c}>
-            <img src={`/media/${c}.svg`}/>
+            <svg>
+              <use xlinkHref={`/media/combo.svg#${c}`}></use>
+            </svg>
           </td>
         )}
       </tr>
