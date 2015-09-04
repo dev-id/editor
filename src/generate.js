@@ -41,7 +41,8 @@ let generate = {
     return card
   },
   pack(code) {
-    let {common, uncommon, rare, mythic, special, size} = Sets[code]
+    let set = Sets[code]
+    let {common, uncommon, rare, mythic, special, size} = set
 
     if (mythic && !_.rand(8))
       rare = mythic
@@ -59,14 +60,13 @@ let generate = {
         ? special.common
         : special.special
       break
+    case 'VMA':
+      //http://www.wizards.com/magic/magazine/article.aspx?x=mtg/daily/arcana/1491
+      if (!_.rand(53))
+        break
     case 'MMA':
     case 'MM2':
       special = set[selectRarity()]
-      break
-    case 'VMA':
-      //http://www.wizards.com/magic/magazine/article.aspx?x=mtg/daily/arcana/1491
-      if (_.rand(53))
-        special = set[selectRarity()]
       break
     }
 
