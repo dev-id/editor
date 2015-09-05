@@ -1,3 +1,4 @@
+let {React} = window
 import _ from '../_.js'
 
 const RARITY = [

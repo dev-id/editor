@@ -1,3 +1,4 @@
+let {React} = window
 import Actions from '../actions.js'
 import Cards from '../components/cards.js'
 import Inputs from '../components/inputs.js'

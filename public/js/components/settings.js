@@ -1,3 +1,4 @@
+let {React} = window
 const SORTS = ['cmc', 'color', 'type', 'rarity']
 
 export default class Settings extends React.Component {

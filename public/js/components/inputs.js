@@ -1,3 +1,4 @@
+let {React} = window
 import Sets from './sets.js'
 
 export default class Inputs extends React.Component {

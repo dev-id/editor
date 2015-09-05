@@ -1,3 +1,4 @@
+let {React} = window
 const BASICS = ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest']
 const COLORS = ['White', 'Blue', 'Black', 'Red', 'Green']
 

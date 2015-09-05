@@ -1,3 +1,4 @@
+let {React} = window
 import SetList from '../setlist.js'
 
 export default class Sets extends React.Component {

@@ -1,3 +1,4 @@
+let {React} = window
 import Editor from './containers/editor.js'
 import store from './store.js'
 import reducers from './reducers/index.js'
