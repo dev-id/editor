@@ -4,7 +4,7 @@ import utils from './utils.js'
 import formats from './formats.js'
 
 function dispatchError(err) {
-  store.dispatch('error', err)
+  store.dispatch('error', err.message || err)
 }
 function getCards(list, cb) {
   // TODO promise instead of cb
