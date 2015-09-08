@@ -1,6 +1,6 @@
 # editor
 
--  [node.js] or [io.js]
+-  [node.js]
 
 -  `make`
 
@@ -9,6 +9,5 @@
 -  <http://localhost:1337>
 
 [node.js]: http://nodejs.org/
-[io.js]: https://iojs.org/
 
-land icons from [mtgicons](https://github.com/jninnes/mtgicons)
+land icons from [BaconCatBug](http://www.mtgsalvation.com/forums/creativity/artwork/494438-baconcatbugs-set-and-mana-symbol-megapack)
