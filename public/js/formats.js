@@ -30,7 +30,7 @@ let read = {
     }
 
     text.forEach(x => {
-      let [, side, n, cardName] = x.match(/(SB: )?(\d+) \[\w+\] (.+)/)
+      let [, side, n, cardName] = x.match(/(sb: )?(\d+) \[\w+\] (.+)/)
       cardName = cardName.replace('/', ' // ')
 
       list[side ? 'side' : 'main'][cardName] = n | 0

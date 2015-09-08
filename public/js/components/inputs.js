@@ -37,7 +37,7 @@ export default class Inputs extends React.Component {
         <input
           accept={this.props.accept}
           type='file'
-          onChange={e=>this.props.setList(e.target.files[0])}
+          onChange={e => this.props.setList(e.target.files[0])}
         />
       </div>
       <div>

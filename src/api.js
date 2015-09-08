@@ -4,7 +4,7 @@ import Sets from '../data/sets'
 import generate from './generate'
 
 let api = {
-  list(names) {
+  cards(names) {
     let invalid = []
     let cards = []
     names.forEach(name => {
@@ -14,20 +14,13 @@ let api = {
         invalid.push(name)
     })
     if (invalid.length) {
-      let error = `invalid cards: ${invalid.splice(-1).join('; ')}`
+      let error = `invalid cards: ${invalid.splice(-5).join('; ')}`
       if (invalid.length)
-        error += `and ${invalid.length} more`
+        error += ` and ${invalid.length} more`
 
       return { error }
     }
     return cards
-  },
-  card(name) {
-    name = _.ascii(name)
-
-    return name in Cards
-      ? generate.card(name)
-      : { error: `invalid card: ${name}` }
   },
   pack(code) {
     return code in Sets

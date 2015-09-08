@@ -6,32 +6,41 @@ import formats from './formats.js'
 function dispatchError(err) {
   store.dispatch('error', err)
 }
+function getCards(list, cb) {
+  // TODO promise instead of cb
+  let names = {}
 
-const BASICS = ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest']
-
-let Actions = {
-  rehydrate() {
-    let {list, cache} = store.state
-
-    let names = {}
+  if (typeof list === 'string')
+    names = [list]
+  else {
     Object.keys(list).forEach(zoneName =>
       Object.keys(list[zoneName]).forEach(name =>
         names[name] = true))
     names = Object.keys(names)
-      .filter(name => BASICS.indexOf(name) === -1)
-      .map(name => name.toLowerCase())
+  }
+  names = names.map(name => name.toLowerCase())
 
-    if (!names.length)
-      return
+  let miss = names.filter(name => !(name in store.state.cache))
 
-    fetch('/list', {
-      method: 'post',
-      body: JSON.stringify(names)
-    })
-    .then(res => res.json())
-    .then(json => store.dispatch('cache', json))
-    .catch(dispatchError)
-  },
+  if (!miss.length)
+    return cb && cb()
+
+  fetch('/cards', {
+    method: 'post',
+    body: JSON.stringify(miss)
+  })
+  .then(res => res.json())
+  .then(cards => {
+    if (cards.error)
+      throw cards.error
+
+    store.dispatch('cache', cards)
+    cb && cb()
+  })
+  .catch(dispatchError)
+}
+
+let Actions = {
   setZone(side) {
     store.dispatch('setZone', side)
     store.dispatch('user', ['side', side])
@@ -40,10 +49,9 @@ let Actions = {
     return formats.write.txt(store.state.list)
   },
   download() {
-    let {list} = store.state
-    let {filename, filetype} = store.state.user
+    let {cache, list, user: { filename, filetype }} = store.state
 
-    let text = formats.write[filetype](list, filename, store.state.cache)
+    let text = formats.write[filetype](list, filename, cache)
     utils.download(text, `${filename}.${filetype}`)
   },
   link(key) {
@@ -52,24 +60,6 @@ let Actions = {
       requestChange: val => store.dispatch('user', [key, val])
     }
   },
-  addCard(name) {
-    name = _.ascii(name).toLowerCase()
-    let card = store.state.cache[name]
-    if (card)
-      return store.dispatch('addCards', [card])
-    fetch('/card', {
-      method: 'post',
-      body: JSON.stringify(name)
-    })
-    .then(res => res.json())
-    .then(json => {
-      if (json.error)
-        store.dispatch('error', json.error)
-      else
-        store.dispatch('addCards', [json])
-    })
-    .catch(dispatchError)
-  },
   addPack() {
     let {set} = store.state.user
     fetch('/pack', {
@@ -77,41 +67,33 @@ let Actions = {
       body: JSON.stringify(set)
     })
     .then(res => res.json())
-    .then(json => store.dispatch('addCards', json))
+    .then(cards => {
+      if (cards.error)
+        throw cards.error
+      store.dispatch('addCards', cards)
+    })
     .catch(dispatchError)
+  },
+  rehydrate() {
+    getCards(store.state.list)
+  },
+  addCard(name) {
+    name = _.ascii(name)
+    getCards(name, ()=>
+      store.dispatch('addCards', [store.state.cache[name]]))
   },
   setList(file) {
     utils.readAsText(file, text => {
       text = _.ascii(text)
+        .toLowerCase()
         .split('\n')
-        .map(x => x.trim().toLowerCase())
+        .map(x => x.trim())
         .filter(x => x)
 
       let type = file.name.split('.').pop()
       let list = formats.read[type](text)
 
-      validate(list)
-    })
-
-    function validate(list) {
-      let names = {}
-      Object.keys(list).forEach(zoneName =>
-        Object.keys(list[zoneName]).forEach(name =>
-          names[name] = true))
-      names = Object.keys(names)
-        .filter(name => BASICS.indexOf(name) === -1)
-
-      fetch('/list', {
-        method: 'post',
-        body: JSON.stringify(names)
-      })
-      .then(res => res.json())
-      .then(cards => {
-        if (cards.error)
-          throw cards.error
-
-        store.dispatch('cache', cards)
-
+      getCards(list, ()=> {
         let newList = {
           main: {},
           side: {},
@@ -120,13 +102,11 @@ let Actions = {
         for (let zoneName in list) {
           let zone = list[zoneName]
           for (let cardName in zone)
-            newList[zoneName][store.state.cache[cardName].name]
-              = list[zoneName][cardName]
+            newList[zoneName][store.state.cache[cardName].name] = zone[cardName]
         }
         store.dispatch('setList', newList)
       })
-      .catch(dispatchError)
-    }
+    })
   }
 }
 
