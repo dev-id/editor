@@ -78,7 +78,7 @@ let Actions = {
     getCards(store.state.list)
   },
   addCard(name) {
-    name = _.ascii(name)
+    name = _.ascii(name).toLowerCase()
     getCards(name, ()=>
       store.dispatch('addCards', [store.state.cache[name]]))
   },
