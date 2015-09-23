@@ -1,12 +1,14 @@
-all: install cards
+all: install fetch cards
 
 install:
 	npm install --no-optional
 	ln -sf ../node_modules public
+	mkdir -p public
+
+fetch:
+	curl -so data/AllSets.json http://mtgjson.com/json/AllSets.json
 
 cards:
-	[ -e data/AllSets.json ] ||\
-	  curl -so data/AllSets.json http://mtgjson.com/json/AllSets.json
 	node app.js cards
 
 js:
