@@ -2,6 +2,14 @@ import fs from 'fs'
 import raw from '../../data/AllSets'
 import _ from '../_'
 
+const COLORS = {
+  W: 'White',
+  U: 'Blue',
+  B: 'Black',
+  R: 'Red',
+  G: 'Green'
+}
+
 let Cards = {}
 let Sets = {}
 
@@ -33,6 +41,14 @@ function before() {
 
   raw.TSP.cards.push(...raw.TSB.cards)
   delete raw.TSB
+
+  for (let card of raw.BFZ.cards)
+    if (card.text && card.text.startsWith('Devoid'))
+      card.colors = card.manaCost
+        .replace(/[\d{}]/g, '')
+        .replace(/(.)\1+/g, '$1')
+        .split('')
+        .map(c => COLORS[c])
 
   for (let card of raw.CNS.cards)
     if (card.type === 'Conspiracy'

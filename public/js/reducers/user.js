@@ -2,7 +2,7 @@ export default function(state = {
   cols: false,
   filename: 'filename',
   filetype: 'txt',
-  set: 'ORI',
+  set: 'BFZ',
   side: false,
   sort: 'color'
 }, type, data) {
