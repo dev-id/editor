@@ -1,5 +1,6 @@
 {
   "externalHelpers": true,
   "loose": "all",
-  "optional": ["validation.undeclaredVariableCheck"]
+  "optional": ["validation.undeclaredVariableCheck"],
+  "jsxPragma": "dom.element"
 }
