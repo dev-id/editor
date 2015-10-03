@@ -1,33 +1,21 @@
-let reducers
-
-let store = {
-  state: {},
+const Store = {
   update: ()=>{},
-  save() {
-    localStorage.state = JSON.stringify(store.state, (k, v) =>
-      k === 'cache' ? undefined : v)
+  init(reducers, state) {
+    this.state = state
+    Store.reducers = reducers
+    Store.dispatch('init')
   },
-  init(_reducers, update) {
-    reducers = _reducers
-
-    try {
-      store.state = JSON.parse(localStorage.state)
-    } catch(err) {}
-    store.dispatch()
-
-    store.update = update
+  subscribe(update) {
+    Store.update = update
   },
   dispatch(type, data) {
     console.log('dispatch', type, data)
-    let {state} = store
+    const {reducers, state} = Store
     for (let key in reducers)
-      state[key] = reducers[key](state[key], type, data, state)
-    store.update()
-  },
-  _dispatch(type) {
-    return data =>
-      store.dispatch(type, data)
+      if (type in reducers[key])
+        state[key] = reducers[key][type](state[key], data)
+    Store.update()
   }
 }
 
-export default store
+export default Store

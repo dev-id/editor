@@ -1,38 +1,41 @@
-let {React} = window
-const BASICS = ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest']
-const COLORS = ['White', 'Blue', 'Black', 'Red', 'Green']
+import Store from '../store.js'
 
-export default class Lands extends React.Component {
-  render() {
-    let {list} = this.props
+const BASICS = [
+  'Plains',
+  'Island',
+  'Swamp',
+  'Mountain',
+  'Forest'
+]
 
-    return <table id='lands'><tbody>
+export default function Lands({list}) {
+  return <table id='lands'>
+    <tr>
+      <th></th>
+      {BASICS.map(cardName =>
+        <th>
+          <svg>
+            <use xlinkHref={`/media/icons.svg#${cardName}`}></use>
+          </svg>
+        </th>
+      )}
+    </tr>
+    {['main', 'side'].map(zoneName =>
       <tr>
-        <td></td>
-        {COLORS.map(c =>
-          <td key={c}>
-            <svg>
-              <use xlinkHref={`/media/combo.svg#${c}`}></use>
-            </svg>
+        <td>{zoneName}</td>
+        {BASICS.map(cardName =>
+          <td>
+            <input
+              onInput={e =>
+                Store.dispatch('setCard',
+                  [zoneName, cardName, e.target.value|0])}
+              min='0'
+              type='number'
+              value={list[zoneName][cardName] | 0}
+            />
           </td>
         )}
       </tr>
-      {['main', 'side'].map(zoneName =>
-        <tr key={zoneName}>
-          <td>{zoneName}</td>
-          {BASICS.map(cardName =>
-            <td key={cardName}>
-              <input
-                min='0'
-                type='number'
-                value={list[zoneName][cardName] | 0}
-                onChange={e =>
-                  this.props.setCard([zoneName, cardName, e.target.value | 0])}
-              />
-            </td>
-          )}
-        </tr>
-      )}
-    </tbody></table>
-  }
+    )}
+  </table>
 }

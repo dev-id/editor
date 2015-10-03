@@ -1,14 +1,6 @@
-let {React} = window
 import _ from '../_.js'
+import App from '../app.js'
 
-const RARITY = [
-  'basic',
-  'common',
-  'uncommon',
-  'rare',
-  'mythic',
-  'special'
-]
 const COLORS = [
   'Colorless',
   'White',
@@ -19,123 +11,121 @@ const COLORS = [
   'Multicolor'
 ]
 
-export default class Cards extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      style: { display: 'none' }
-    }
+const RARITY = [
+  'basic',
+  'common',
+  'uncommon',
+  'rare',
+  'mythic',
+  'special'
+]
+
+function group(cards, sort) {
+  const tmp = _.group(cards, sort)
+  let keys = Object.keys(tmp)
+
+  switch(sort) {
+    case 'cmc':
+      const arr = []
+      keys = keys.filter(key => {
+        if (key|0 < 7)
+          return true
+        arr.push(...tmp[key])
+      })
+      if (arr.length)
+        tmp['6']
+          ? tmp['6'].push(...arr)
+          : tmp['6'] = arr
+      break
+    case 'color':
+      keys = COLORS.filter(x => keys.indexOf(x) > -1)
+      break
+    case 'rarity':
+      keys = RARITY.filter(x => keys.indexOf(x) > -1)
+      break
+    case 'type':
+      keys.sort()
+      break
   }
-  Grid(zoneName, groups) {
-    let {clickCard} = this.props
 
-    let cards = []
-    for (let key in groups)
-      cards.push(...groups[key])
+  return keys.reduce((group, key) => {
+    group[key] = tmp[key]
+    return group
+  }, {})
+}
 
-    return cards.map((card, i) =>
+function hover(e) {
+  const {offsetLeft} = e.target
+  const {clientWidth} = document.documentElement
+  const imgWidth = 240
+  const colWidth = 180
+
+  const style = offsetLeft + colWidth > clientWidth - imgWidth
+    ? 'left: 0'
+    : 'right: 0'
+
+  //XXX lol wut
+  const el = document.getElementById('hover')
+  el.setAttribute('style', style)
+  el.src = e.target.src
+}
+
+function Grid({groups, zoneName}) {
+  const cards = _.flatObj(groups)
+
+  return <div>
+    {cards.map(card =>
       <img
-        key={i}
         src={card.url}
-        onClick={e => clickCard([zoneName, card.name, e.shiftKey])}
+        onClick={e => App.dispatch('click', [zoneName, card.name, e.shiftKey])}
       />
-    )
-  }
-  Cols(zoneName, groups) {
-    let {clickCard} = this.props
+    )}
+  </div>
+}
 
-    return <div className='Cols row'>
-      {Object.keys(groups).map(groupName =>
-        <div key={groupName} className='col'>
-          <div>{groups[groupName].length} - {groupName}</div>
-          {groups[groupName].map((card, i) =>
-            <img
-              key={i}
-              src={card.url}
-              onClick={e => clickCard([zoneName, card.name, e.shiftKey])}
-              onMouseEnter={e => this.hover(e)}
-            />
-          )}
-        </div>
-      )}
-    </div>
-  }
-  hover(e) {
-    let {offsetLeft} = e.target
-    let {clientWidth} = document.documentElement
+function Cols({groups, zoneName}) {
+  return <div className='Cols row'>
+    {Object.keys(groups).map(key =>
+      <div className='col'>
+        <div>{key} - {groups[key].length}</div>
+        {groups[key].map(card =>
+          <img
+            src={card.url}
+            onClick={e =>
+              App.dispatch('click', [zoneName, card.name, e.shiftKey])}
+            onMouseOver={hover}
+          />
+        )}
+      </div>
+    )}
+  </div>
+}
 
-    let imgWidth = 240
-    let colWidth = 180
+export default function Cards({cache, cols, list, sort}) {
+  const View = cols ? Cols : Grid
 
-    let style = offsetLeft + colWidth > clientWidth - imgWidth
-      ? { left: 0 }
-      : { right: 0 }
+  return <div id='cards'>
+    <img
+      onMouseover={hover}
+      hidden={!cols}
+      id='hover'
+    />
+    {Object.keys(list).map(zoneName => {
+      const cards = []
+      for (let cardName in list[zoneName]) {
+        const card = cache[cardName.toLowerCase()]
+        if (!card)
+          continue
+        let n = list[zoneName][cardName]
+        while (n--)
+          cards.push(card)
+      }
+      const groups = group(cards, sort)
 
-    this.setState({ style, url: e.target.src })
-  }
-  group(cards) {
-    let {sort} = this.props
-    _.sort(cards, ['color', 'cmc', 'name'])
-    let groups = _.group(cards, sort)
-    let keys = Object.keys(groups)
-
-    switch (sort) {
-      case 'cmc':
-        let arr = []
-
-        for (let key in groups)
-          if ((key|0) > 6)
-            arr.push(...groups[key])
-
-        if (arr.length) {
-          groups['6'] || (groups['6'] = [])
-          groups['6'].push(...arr)
-          keys = keys.filter(x => (x|0) < 7)
-        }
-        break
-      case 'color':
-        keys = COLORS.filter(x => keys.indexOf(x) > -1)
-        break
-      case 'rarity':
-        keys = RARITY.filter(x => keys.indexOf(x) > -1)
-        break
-      case 'type':
-        keys = keys.sort()
-        break
-    }
-
-    let obj = {}
-    keys.forEach(key => obj[key] = groups[key])
-    return obj
-  }
-  render() {
-    let {cache, list, cols} = this.props
-    let view = cols ? 'Cols' : 'Grid'
-
-    return <div id='cards'>
-      {Object.keys(list).map(zoneName => {
-        let cards = []
-        let zone = list[zoneName]
-        for (let cardName in zone) {
-          let n = zone[cardName]
-          while (n--)
-            cards.push(cache[cardName.toLowerCase()] || {})
-        }
-
-        let groups = this.group(cards)
-
-        return <div key={zoneName}>
-          <h1>{zoneName} - {cards.length}</h1>
-          {this[view](zoneName, groups)}
-        </div>
-      })}
-      <img
-        hidden={!cols}
-        id='hover'
-        src={this.state.url}
-        style={this.state.style}
-        onMouseEnter={e=>this.hover(e)}
-      />
-    </div>
-  }
+      return <div>
+        <h1>{zoneName} - {cards.length}</h1>
+        <View groups={groups} zoneName={zoneName}/>
+      </div>
+    })}
+  </div>
 }

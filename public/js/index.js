@@ -1,19 +1,15 @@
-let {React} = window
-import Editor from './containers/editor.js'
-import store from './store.js'
-import reducers from './reducers/index.js'
+import dom from './dom.js'
+import Editor from './components/editor.js'
+import Store from './store.js'
+import reducers from './state/index.js'
+import App from './app.js'
 
-class App extends React.Component {
-  componentWillMount() {
-    store.init(reducers, this.forceUpdate.bind(this))
-    window.addEventListener('unload', store.save)
-  }
-  render() {
-    return <Editor
-      state={store.state}
-      _dispatch={store._dispatch}
-    />
-  }
-}
+window.dom = dom
+const state = JSON.parse(localStorage.state || '{}')
+Store.init(reducers, state)
+dom.render(Store, Editor, document.body)
+App.rehydrate()
 
-React.render(<App/>, document.getElementById('app'))
+window.addEventListener('unload', ()=>
+  localStorage.state = JSON.stringify(Store.state, (k, v) =>
+    k === 'cache' ? undefined : v))

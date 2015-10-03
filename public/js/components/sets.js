@@ -1,16 +1,14 @@
-let {React} = window
-import SetList from '../setlist.js'
+import App from '../app.js'
+import setdata from '../setdata.js'
 
-export default class Sets extends React.Component {
-  render() {
-    return <select valueLink={this.props.valueLink}>
-      {SetList.map(({label, sets}) =>
-        <optgroup key={label} label={label}>
-          {sets.map(([code, name]) =>
-            <option key={code} value={code}>{name}</option>
-          )}
-        </optgroup>
-      )}
-    </select>
-  }
+export default function Sets({link}) {
+  return <select {...App.vLink(link)}>
+    {setdata.map(({label, sets}) =>
+      <optgroup label={label}>
+        {sets.map(([code, name]) =>
+          <option value={code}>{name}</option>
+        )}
+      </optgroup>
+    )}
+  </select>
 }

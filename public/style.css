@@ -1,7 +1,5 @@
 button,
-input[type="file"],
-input[type="number"],
-input[type="text"],
+input:not([type=checkbox]),
 select,
 textarea {
   box-sizing: border-box;
@@ -60,6 +58,7 @@ label {
 #hover {
   position: fixed;
   bottom: 0;
+  right: 0;
 }
 
 #lands input {
