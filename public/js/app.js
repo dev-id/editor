@@ -19,7 +19,7 @@ export default {
     }
   },
   post(type, data, cb) {
-    fetch(`http://localhost:1337/${type}`, {
+    fetch(`/${type}`, {
       body: JSON.stringify(data),
       method: 'post'
     })
